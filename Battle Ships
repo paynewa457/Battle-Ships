@@ -1,0 +1,64 @@
+/**
+ * I will be making a text based versin of the game battle ships.
+ *
+ * Walt Payne
+ * 14/05/24
+ */
+
+import java.util.Scanner;
+public class Game
+{
+    public static void main(String[] args){
+        Scanner keyboard = new Scanner(System.in);
+        String board1[][] = new String[10][10];
+        String board2[][] = new String[10][10];
+        int shipX = 10;
+        int shipY = 8;
+        int guessX=-1;
+        int guessY=-1;
+        boolean shipFound = false;
+        player1(board1, shipX, shipY, guessX, guessY, keyboard, shipFound);
+        
+    }
+    static void player1(String board1[][], int shipX, int shipY, int guessX, int guessY, Scanner keyboard, boolean shipFound){
+        for(int i=0; i<10; i++){
+            for(int j=0; j<10; j++){
+                board1[i][j] = ". ";
+            }
+        }
+        for(int y=0; y<10; y++){
+                for(int x=0; x<10; x++){
+                    System.out.print(board1[x][y]);
+                }
+                System.out.println();
+            }
+            System.out.println("Enter the x position");
+            guessX = keyboard.nextInt();
+            System.out.println("Enter the y position");
+            guessY = keyboard.nextInt();
+
+            
+            if(guessX==shipX && guessY==shipY){
+                System.out.println("ship sunk");
+                shipFound=true;
+            }else if (guessX==46 && guessY==97) {
+                System.out.println(shipX+ " "+ shipY);
+            }else{
+                System.out.println("You have not found the ship");
+                board1[guessX-1][guessY-1] = "x";
+            }
+    }
+    static void player2(String board2[][]){
+        for(int i=0; i<10; i++){
+            for(int j=0; j<10; j++){
+                board2[i][j] = ". ";
+            }
+        }
+        for(int y=0; y<10; y++){
+                for(int x=0; x<10; x++){
+                    System.out.print(board2[x][y]);
+                }
+                System.out.println();
+            }
+    }
+}
