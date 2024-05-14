@@ -14,6 +14,8 @@ public class Game
         String board2[][] = new String[10][10];
         int shipX = 10;
         int shipY = 8;
+        // int ship2X = 10;
+        // int ship2Y = 9;
         int guessX=-1;
         int guessY=-1;
         boolean shipFound = false;
@@ -26,7 +28,8 @@ public class Game
                 board1[i][j] = ". ";
             }
         }
-        for(int y=0; y<10; y++){
+        for(int i=0; !shipFound; i++){
+            for(int y=0; y<10; y++){
                 for(int x=0; x<10; x++){
                     System.out.print(board1[x][y]);
                 }
@@ -39,16 +42,20 @@ public class Game
 
             
             if(guessX==shipX && guessY==shipY){
+                System.out.println("hit");
+                board1[guessX-1][guessY-1] = "o ";
                 System.out.println("ship sunk");
-                shipFound=true;
+                shipFound = true;
             }else if (guessX==46 && guessY==97) {
                 System.out.println(shipX+ " "+ shipY);
             }else{
-                System.out.println("You have not found the ship");
-                board1[guessX-1][guessY-1] = "x";
+                System.out.println("miss");
+                board1[guessX-1][guessY-1] = "x ";
             }
+        
+        }
     }
-    static void player2(String board2[][]){
+    /*static void player2(String board2[][]){
         for(int i=0; i<10; i++){
             for(int j=0; j<10; j++){
                 board2[i][j] = ". ";
@@ -60,5 +67,5 @@ public class Game
                 }
                 System.out.println();
             }
-    }
+    }*/
 }
