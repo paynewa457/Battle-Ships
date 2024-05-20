@@ -6,32 +6,59 @@
  */
 
 import java.util.Scanner;
-import java.util.Arrays;
-public class Game
-{
-    public static void main(String[] args){
-        Scanner keyboard = new Scanner(System.in);
-        String board1[][] = new String[10][10];
-        String board2[][] = new String[10][10];
-        System.out.println("What is the y coordnate of the ship");
-        int ship1X = keyboard.nextInt();
-        System.out.println("What is the y coordnate of the ship");
-        int ship1Y = keyboard.nextInt();
-        int guessX=-1;
-        int guessY=-1;
-        boolean shipSunk = false;
-        player1(board1, ship1X, ship1Y, guessX, guessY, keyboard, shipSunk);
-        
+import java.util.ArrayList;
+import java.util.List;
+
+class ShipSpace {
+    int x;
+    int y;
+
+    public ShipSpace(int x, int y) {
+        this.x = x;
+        this.y = y;
     }
-    static void player1(String board1[][], int ship1X, int ship1Y, int guessX, int guessY, Scanner keyboard, boolean shipSunk){
-        for(int i=0; i<10; i++){
-            for(int j=0; j<10; j++){
+}
+
+public class Game {
+    public static void main(String[] args) {
+        Scanner keyboard = new Scanner(System.in);
+        String[][] board1 = new String[10][10];
+        List<ShipSpace> coordinates = new ArrayList<>();
+
+        System.out.println("Enter the starting x coordinate of the ship (1-10)");
+        int ship1X = keyboard.nextInt();
+        System.out.println("Enter the starting y coordinate of the ship (1-10)");
+        int ship1Y = keyboard.nextInt();
+        System.out.println("Enter the length of the ship");
+        int shipLength = keyboard.nextInt();
+        System.out.println("Enter the orientation of the ship (h for horizontal, v for vertical)");
+        char orientation = keyboard.next().charAt(0);
+
+        // Storing ship positions in the ShipSpace array
+        for (int i = 0; i < shipLength; i++) {
+            if (orientation == 'h') {
+                coordinates.add(new ShipSpace(ship1X + i, ship1Y));
+            } else if (orientation == 'v') {
+                coordinates.add(new ShipSpace(ship1X, ship1Y + i));
+            }
+        }
+
+        int guessX = -1;
+        int guessY = -1;
+        boolean shipSunk = false;
+        player1(board1, coordinates, guessX, guessY, keyboard, shipSunk);
+    }
+
+    static void player1(String[][] board1, List<ShipSpace> coordinates, int guessX, int guessY, Scanner keyboard, boolean shipSunk) {
+        for (int i = 0; i < 10; i++) {
+            for (int j = 0; j < 10; j++) {
                 board1[i][j] = ". ";
             }
         }
-        for(int i=0; !shipSunk; i++){
-            for(int y=0; y<10; y++){
-                for(int x=0; x<10; x++){
+        
+        while (!shipSunk) {
+            for (int y = 0; y < 10; y++) {
+                for (int x = 0; x < 10; x++) {
                     System.out.print(board1[x][y]);
                 }
                 System.out.println();
@@ -40,18 +67,41 @@ public class Game
             guessX = keyboard.nextInt();
             System.out.println("Enter the y position");
             guessY = keyboard.nextInt();
-            
 
-            if(guessX==ship1X && guessY==ship1Y){
-                System.out.println("hit");
-                board1[guessX-1][guessY-1] = "o ";
-                System.out.println("ship sunk");
-                shipSunk = true;
-            }else{
-                System.out.println("miss");
-                board1[guessX-1][guessY-1] = "x ";
+            // Validate input
+            if (guessX < 1 || guessX > 10 || guessY < 1 || guessY > 10) {
+                System.out.println("Invalid coordinates. Please enter values between 1 and 10.");
+                continue;
             }
-        
+
+            boolean hit = false;
+            // Check if the guessed position matches any ship position
+            for (ShipSpace ship : coordinates) {
+                if (guessX == ship.x && guessY == ship.y) {
+                    System.out.println("hit");
+                    board1[guessX - 1][guessY - 1] = "o ";
+                    hit = true;
+                    break;
+                }
+            }
+
+            if (hit) {
+                boolean allSunk = true;
+                // Check if all ships are sunk
+                for (ShipSpace ship : coordinates) {
+                    if (board1[ship.x - 1][ship.y - 1].equals(". ")) {
+                        allSunk = false;
+                        break;
+                    }
+                }
+                if (allSunk) {
+                    System.out.println("All ships sunk!");
+                    shipSunk = true;
+                }
+            } else {
+                System.out.println("miss");
+                board1[guessX - 1][guessY - 1] = "x ";
+            }
         }
     }
 }
