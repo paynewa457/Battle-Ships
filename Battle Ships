@@ -24,6 +24,9 @@ public class Game {
         Scanner keyboard = new Scanner(System.in);
         String[][] board1 = new String[10][10];
         List<ShipSpace> coordinates = new ArrayList<>();
+        
+        System.out.println("To place the tiles you need to type the cordinates of one section of your ship,");
+        System.out.println("you will then have to say how many squares long the ship is and lastly what is orientation is");
 
         System.out.println("Enter the starting x coordinate of the ship (1-10)");
         int ship1X = keyboard.nextInt();
@@ -81,7 +84,6 @@ public class Game {
                     System.out.println("hit");
                     board1[guessX - 1][guessY - 1] = "o ";
                     hit = true;
-                    break;
                 }
             }
 
@@ -91,7 +93,6 @@ public class Game {
                 for (ShipSpace ship : coordinates) {
                     if (board1[ship.x - 1][ship.y - 1].equals(". ")) {
                         allSunk = false;
-                        break;
                     }
                 }
                 if (allSunk) {
