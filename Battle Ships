@@ -21,50 +21,63 @@ public class Game {
     public static void main(String[] args) {
         Scanner keyboard = new Scanner(System.in);
         String[][] board1 = new String[10][10];
-        ShipSpace[] shipSpaces;
+        ShipSpace[][] ships;  // Array to hold multiple ships
 
-        System.out.println("To place the tiles you need to type the coordinates of one section of your ship,");
-        System.out.println("you will then have to say how many squares long the ship is and lastly what its orientation is");
 
-        System.out.println("Enter the starting x coordinate of the ship (1-10)");
-        int ship1X = keyboard.nextInt();
-        System.out.println("Enter the starting y coordinate of the ship (1-10)");
-        int ship1Y = keyboard.nextInt();
-        System.out.println("Enter the length of the ship");
-        int shipLength = keyboard.nextInt();
-        System.out.println("Enter the orientation of the ship (h for horizontal, v for vertical)");
-        char orientation = keyboard.next().charAt(0);
+        ships = new ShipSpace[4][];  // Initialize the array to hold the ships
 
-        // Initialize the array to store ship positions
-        shipSpaces = new ShipSpace[shipLength];
+        System.out.println("To place the ships you need to type the coordinates of one section of your ship,");
+        System.out.println("you will then be told how many squares long the ship is and lastly you will say what its orientation is");
+        for (int s = 0; s < 4; s++) {
+            System.out.println("Place ship" + (s + 1) + "");
 
-        // Storing ship positions in the ShipSpace array
-        for (int i = 0; i < shipLength; i++) {
-            if (orientation == 'h') {
-                shipSpaces[i] = new ShipSpace(ship1X + i, ship1Y);
-            } else if (orientation == 'v') {
-                shipSpaces[i] = new ShipSpace(ship1X, ship1Y + i);
+            int shipLength;
+            if(s == 0){
+                shipLength = (s + 2);
+            }else{
+                shipLength = (s + 1);
+            }
+            System.out.println("This ship is " + shipLength + " squares long");
+            System.out.println("Enter the starting x coordinate of the ship (1-10)");
+            int shipX = keyboard.nextInt();
+            System.out.println("Enter the starting y coordinate of the ship (1-10)");
+            int shipY = keyboard.nextInt();
+            System.out.println("Enter the orientation of the ship (h for horizontal, v for vertical)");
+            char orientation = keyboard.next().charAt(0);
+
+            // Initialize the array to store ship positions
+            ships[s] = new ShipSpace[shipLength];
+
+            // Storing ship positions in the ShipSpace array
+            for (int i = 0; i < shipLength; i++) {
+                if (orientation == 'h') {
+                    ships[s][i] = new ShipSpace(shipX + i, shipY);
+                } else if (orientation == 'v') {
+                    ships[s][i] = new ShipSpace(shipX, shipY + i);
+                }
             }
         }
 
         int guessX = -1;
         int guessY = -1;
         boolean shipSunk = false;
-        player1(board1, shipSpaces, guessX, guessY, keyboard, shipSunk);
+        player1(board1, ships, guessX, guessY, keyboard);
     }
 
-    static void player1(String[][] board1, ShipSpace[] shipSpaces, int guessX, int guessY, Scanner keyboard, boolean shipSunk) {
+    static void player1(String[][] board1, ShipSpace[][] ships, int guessX, int guessY, Scanner keyboard) {
         for (int i = 0; i < 10; i++) {
             for (int j = 0; j < 10; j++) {
                 board1[i][j] = ". ";
             }
         }
 
-        while (!shipSunk) {
+        int shipsRemaining = ships.length;
+
+        while (shipsRemaining > 0) {
             // Print column labels (A-J)
             System.out.print("  ");
-            for (char c = 'A'; c <= 'J'; c++) {
-                System.out.print(c + " ");
+            for (char l = 'A'; l <= 'J'; l++) {
+                System.out.print(l + " ");
             }
             System.out.println();
 
@@ -93,26 +106,50 @@ public class Game {
             }
 
             boolean hit = false;
+
             // Check if the guessed position matches any ship position
-            for (ShipSpace ship : shipSpaces) {
-                if (guessX == ship.x && guessY == ship.y) {
-                    System.out.println("hit");
-                    board1[guessX - 1][guessY - 1] = "o ";
-                    hit = true;
+            for (ShipSpace[] ship : ships) {
+                for (ShipSpace shipSpace : ship) {
+                    if (guessX == shipSpace.x && guessY == shipSpace.y) {
+                        System.out.println("hit");
+                        board1[guessX - 1][guessY - 1] = "o ";
+                        hit = true;
+                        break;
+                    }
                 }
+                if (hit) break;
             }
 
             if (hit) {
                 boolean allSunk = true;
+
                 // Check if all ships are sunk
-                for (ShipSpace ship : shipSpaces) {
-                    if (board1[ship.x - 1][ship.y - 1].equals(". ")) {
-                        allSunk = false;
+                for (ShipSpace[] ship : ships) {
+                    for (ShipSpace shipSpace : ship) {
+                        if (board1[shipSpace.x - 1][shipSpace.y - 1].equals(". ")) {
+                            allSunk = false;
+                            break;
+                        }
                     }
+                    if (!allSunk) break;
                 }
+
                 if (allSunk) {
                     System.out.println("All ships sunk!");
-                    shipSunk = true;
+                    shipsRemaining = 0;
+                } else {
+                    // Check if the current ship is sunk
+                    boolean currentShipSunk = true;
+                    for (ShipSpace shipSpace : ships[shipsRemaining - 1]) {
+                        if (board1[shipSpace.x - 1][shipSpace.y - 1].equals(". ")) {
+                            currentShipSunk = false;
+                            break;
+                        }
+                    }
+                    if (currentShipSunk) {
+                        System.out.println("Ship sunk!");
+                        shipsRemaining--;
+                    }
                 }
             } else {
                 System.out.println("miss");
