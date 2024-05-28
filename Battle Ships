@@ -24,11 +24,13 @@ public class Game {
         ShipSpace[][] ships;  // Array to hold multiple ships
 
 
-        ships = new ShipSpace[4][];  // Initialize the array to hold the ships
+        int numShips = 2;
+        
+        ships = new ShipSpace[numShips][];  // Initialize the array to hold the ships
 
         System.out.println("To place the ships you need to type the coordinates of one section of your ship,");
         System.out.println("you will then be told how many squares long the ship is and lastly you will say what its orientation is");
-        for (int s = 0; s < 4; s++) {
+        for (int s = 0; s < numShips; s++) {
             System.out.println("Place ship" + (s + 1) + "");
 
             int shipLength;
@@ -40,19 +42,33 @@ public class Game {
             System.out.println("This ship is " + shipLength + " squares long");
             System.out.println("Enter the starting x coordinate of the ship (1-10)");
             int shipX = keyboard.nextInt();
+            if (shipX < 1 || shipX > 10 ) {
+                System.out.println("Invalid coordinates. Please enter values between 1 and 10.");
+                System.out.println("Enter the x position (1-10)");
+                shipX = keyboard.nextInt();
+            }
             System.out.println("Enter the starting y coordinate of the ship (1-10)");
             int shipY = keyboard.nextInt();
+            if (shipY < 1 || shipY > 10 ) {
+                System.out.println("Invalid coordinates. Please enter values between 1 and 10.");
+                System.out.println("Enter the x position (1-10)");
+                shipY = keyboard.nextInt();
+            }
             System.out.println("Enter the orientation of the ship (h for horizontal, v for vertical)");
-            char orientation = keyboard.next().charAt(0);
+            String orientation = keyboard.nextLine();
+            if (orientation.equals("h")|| orientation.equals("v")) {
+                System.out.println("Invalid coordinates. Please enter values between 1 and 10.");
+                orientation = keyboard.nextLine();
+            }
 
             // Initialize the array to store ship positions
             ships[s] = new ShipSpace[shipLength];
 
             // Storing ship positions in the ShipSpace array
             for (int i = 0; i < shipLength; i++) {
-                if (orientation == 'h') {
+                if (orientation.equals("h")) {
                     ships[s][i] = new ShipSpace(shipX + i, shipY);
-                } else if (orientation == 'v') {
+                } else if (orientation.equals("v")) {
                     ships[s][i] = new ShipSpace(shipX, shipY + i);
                 }
             }
@@ -96,14 +112,19 @@ public class Game {
 
             System.out.println("Enter the x position (1-10)");
             guessX = keyboard.nextInt();
+            if (guessX < 1 || guessX > 10 ) {
+                System.out.println("Invalid coordinates. Please enter values between 1 and 10.");
+                System.out.println("Enter the x position (1-10)");
+                guessX = keyboard.nextInt();
+            }
             System.out.println("Enter the y position (1-10)");
             guessY = keyboard.nextInt();
-
-            // Validate input
-            if (guessX < 1 || guessX > 10 || guessY < 1 || guessY > 10) {
+             if (guessY < 1 || guessY > 10 ) {
                 System.out.println("Invalid coordinates. Please enter values between 1 and 10.");
-                continue;
+                System.out.println("Enter the y position (1-10)");
+                guessY = keyboard.nextInt();
             }
+
 
             boolean hit = false;
 
@@ -131,7 +152,6 @@ public class Game {
                             break;
                         }
                     }
-                    if (!allSunk) break;
                 }
 
                 if (allSunk) {
