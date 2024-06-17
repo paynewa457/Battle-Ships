@@ -27,7 +27,7 @@ public class Game {
         
         boolean placingShip;
         
-        int numShips = 1;
+        int numShips = 2;
         
         ships = new ShipSpace[numShips][];  // Initialize the array to hold the ships
 
@@ -44,7 +44,7 @@ public class Game {
                 shipLength = (s + 1);
             }
             System.out.println("This ship is " + shipLength + " squares long");
-
+            //while shiplacing
             String orientation = getValidOrientation(keyboard);
             int shipX = getValidXCoordinate(keyboard, "Enter the starting x coordinate of the ship (A-J): ", placingShip = true, shipOrientation = orientation);
             int shipY = getValidYCoordinate(keyboard, "Enter the starting y coordinate of the ship (1-10): ", placingShip = true, shipOrientation = orientation);
@@ -69,9 +69,9 @@ public class Game {
     }
 
     static void player1(String[][] board1, ShipSpace[][] ships, int guessX, int guessY, Scanner keyboard) {
-        for (int i = 0; i < 10; i++) {
-            for (int j = 0; j < 10; j++) {
-                board1[i][j] = ". ";
+        for (int x = 0; x < 10; x++) {
+            for (int y = 0; y < 10; y++) {
+                board1[x][y] = ". ";
             }
         }
 
