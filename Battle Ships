@@ -11,21 +11,29 @@ public class Game {
     public static void main(String[] args) {
         Scanner keyboard = new Scanner(System.in);
         String[][] board1 = new String[10][10];
-        //String[][] board2 = new String[10][10];
+        // String[][] board2 = new String[10][10];
         
         System.out.println("To place the ships you need to type the coordinates of one section of your ship,");
         System.out.println("you will then be told how many squares long the ship is and lastly you will say what its orientation is");
         
         board1 = initializeBoard(board1, keyboard);
-        //board2 = initializeBoard(board2, keyboard);
+        System.out.print('\u000c');
+        // board2 = initializeBoard(board2, keyboard);
 
         int guessX = -1;
         int guessY = -1;
-        player1(board1, guessX, guessY, keyboard);
+        boolean gameNotWon = true;
+        
+        while(gameNotWon){
+            player1(board1, guessX, guessY, keyboard, true);
+            // if(gameNotWon){
+                // player2(board2, guessX, guessY, keyboard, true);
+            // }
+        }
     }
 
     static String[][] initializeBoard(String[][] board, Scanner keyboard) {
-        int numShips = 2;
+        int numShips = 1;
         
         for (int x = 0; x < 10; x++) {
             for (int y = 0; y < 10; y++) {
@@ -63,37 +71,69 @@ public class Game {
         return board;
     }
 
-    static void player1(String[][] board1, int guessX, int guessY, Scanner keyboard) {
-        boolean gameNotWon = true;
+    static void player1(String[][] board1, int guessX, int guessY, Scanner keyboard, boolean gameNotWon) {
+        boolean turnOver = false;
         boolean alreadyGuessed;
         
-        while (gameNotWon) {
+        while (!turnOver) {
             printBoard(board1);
             alreadyGuessed = true;
             while(alreadyGuessed){
-                // Checks to see if 
+                // Doesn't validate guess until  has checked if the gu 
                 guessX = getValidXCoordinate(keyboard, "Enter the x position (A-J): ", false, "N/A");
                 guessY = getValidYCoordinate(keyboard, "Enter the y position (1-10): ", false, "N/A");
                 
                 if((board1[guessX - 1][guessY - 1].equals("x"))||(board1[guessX - 1][guessY - 1].equals("o"))){
-                    System.out.println("you have already guessed that square please guess another one");
+                    System.out.println("You have already guessed that square please guess another one");
                 }else if (board1[guessX - 1][guessY - 1].equals("ship")) {
                     System.out.println("hit");
                     board1[guessX - 1][guessY - 1] = "o ";
-                    break;
+                    alreadyGuessed = false;
                 }else {
                     System.out.println("miss");
                     board1[guessX - 1][guessY - 1] = "x ";
-                    break;
+                    alreadyGuessed = false;
+                    turnOver = true;
                 }
             }
-
             if (areAllShipsSunk(board1)) {
                 System.out.println("All ships sunk!");
-                break;
+                turnOver = true;
+                gameNotWon = false;
             }
         }
     }
+    
+    // static void player2(String[][] board2, int guessX, int guessY, Scanner keyboard, boolean gameNotWon){
+        // boolean alreadyGuessed;
+        
+        // while (gameNotWon) {
+            // printBoard(board2);
+            // alreadyGuessed = true;
+            // while(alreadyGuessed){
+                // // Checks to see if 
+                // guessX = getValidXCoordinate(keyboard, "Enter the x position (A-J): ", false, "N/A");
+                // guessY = getValidYCoordinate(keyboard, "Enter the y position (1-10): ", false, "N/A");
+                
+                // if((board2[guessX - 1][guessY - 1].equals("x"))||(board2[guessX - 1][guessY - 1].equals("o"))){
+                    // System.out.println("you have already guessed that square please guess another one");
+                // }else if (board2[guessX - 1][guessY - 1].equals("ship")) {
+                    // System.out.println("hit");
+                    // board2[guessX - 1][guessY - 1] = "o ";
+                    // break;
+                // }else {
+                    // System.out.println("miss");
+                    // board2[guessX - 1][guessY - 1] = "x ";
+                    // break;
+                // }
+            // }
+
+            // if (areAllShipsSunk(board2)) {
+                // System.out.println("All ships sunk!");
+                // break;
+            // }
+        // }
+    // }
 
     static void printBoard(String[][] board) {
         // Print column labels (A-J)
