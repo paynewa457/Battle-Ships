@@ -17,7 +17,7 @@ public class Game {
         System.out.println("you will then be told how many squares long the ship is and lastly you will say what its orientation is");
         
         board1 = initializeBoard(board1, keyboard);
-        System.out.print('\u000c');
+        //System.out.print('\u000c');
         board2 = initializeBoard(board2, keyboard);
         System.out.print('\u000c');
 
@@ -77,7 +77,7 @@ public class Game {
                 
                 boolean validAnswer = false;
                 
-                System.out.println("Would you like to replace your ships");
+                System.out.println("Would you like to replace your ships 'yes'or 'no'");
                 String yesOrNo = keyboard.nextLine();
                 while(!validAnswer){
                     if(yesOrNo.toLowerCase().equals("no")){
@@ -87,6 +87,7 @@ public class Game {
                         validAnswer = true;
                     }else{
                         System.out.println("That is not a valid answer please enter either 'yes' or 'no'");
+                        yesOrNo = keyboard.nextLine();
                     }
                 }
             }
