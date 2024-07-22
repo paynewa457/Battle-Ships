@@ -13,11 +13,12 @@ public class Game {
         String[][] board1 = new String[10][10];
         String[][] board2 = new String[10][10];
         
+        
         System.out.println("To place the ships you need to type the coordinates of one section of your ship,");
         System.out.println("you will then be told how many squares long the ship is and lastly you will say what its orientation is");
         
         board1 = initializeBoard(board1, keyboard);
-        //System.out.print('\u000c');
+        System.out.print('\u000c');
         board2 = initializeBoard(board2, keyboard);
         System.out.print('\u000c');
 
@@ -35,9 +36,8 @@ public class Game {
     }
 
     static String[][] initializeBoard(String[][] board, Scanner keyboard) {
-        int numShips = 1;
+        int numShips = 2;
         boolean okayWithPlacement = false;
-        
         
         while(!okayWithPlacement){
             for (int x = 0; x < 10; x++) {
@@ -74,21 +74,20 @@ public class Game {
                 }
                 System.out.print('\u000c');
                 printBoard(board, true);
+                }
+            boolean validAnswer = false;
                 
-                boolean validAnswer = false;
-                
-                System.out.println("Would you like to replace your ships 'yes'or 'no'");
-                String yesOrNo = keyboard.nextLine();
-                while(!validAnswer){
-                    if(yesOrNo.toLowerCase().equals("no")){
-                        validAnswer = true;
-                        okayWithPlacement = true;
-                    }else if(yesOrNo.toLowerCase().equals("yes")){
-                        validAnswer = true;
-                    }else{
-                        System.out.println("That is not a valid answer please enter either 'yes' or 'no'");
-                        yesOrNo = keyboard.nextLine();
-                    }
+            System.out.println("Would you like to replace your ships 'yes'or 'no'");
+            String yesOrNo = keyboard.nextLine();
+            while(!validAnswer){
+                if(yesOrNo.toLowerCase().equals("no")){
+                    validAnswer = true;
+                    okayWithPlacement = true;
+                }else if(yesOrNo.toLowerCase().equals("yes")){
+                    validAnswer = true;
+                }else{
+                    System.out.println("That is not a valid answer please enter either 'yes' or 'no'");
+                    yesOrNo = keyboard.nextLine();
                 }
             }
         }
