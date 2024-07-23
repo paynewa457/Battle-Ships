@@ -17,9 +17,9 @@ public class Game {
         System.out.println("To place the ships you need to type the coordinates of one section of your ship,");
         System.out.println("you will then be told how many squares long the ship is and lastly you will say what its orientation is");
         
-        board1 = initializeBoard(board1, keyboard);
+        board1 = initializeBoard(board1, keyboard, true);
         System.out.print('\u000c');
-        board2 = initializeBoard(board2, keyboard);
+        board2 = initializeBoard(board2, keyboard, false);
         System.out.print('\u000c');
 
         int guessX = -1;
@@ -27,17 +27,23 @@ public class Game {
         boolean gameNotWon = true;
         
         while(gameNotWon){
-            gameNotWon = player2(board2, guessX, guessY, keyboard, true);
+            gameNotWon = playTurn(board2, guessX, guessY, keyboard, true, true);
             if(gameNotWon){
-                gameNotWon = player1(board1, guessX, guessY, keyboard, true);
+                gameNotWon = playTurn(board1, guessX, guessY, keyboard, true, false);
             }
         }
         System.out.println("Game Over");
     }
 
-    static String[][] initializeBoard(String[][] board, Scanner keyboard) {
-        int numShips = 2;
+    static String[][] initializeBoard(String[][] board, Scanner keyboard, boolean player1) {
+        int numShips = 1;
         boolean okayWithPlacement = false;
+        
+        if(player1){
+            System.out.println("Player1 is placing");
+        }else{
+            System.out.println("Player2 is placing");
+        }
         
         while(!okayWithPlacement){
             for (int x = 0; x < 10; x++) {
@@ -94,33 +100,40 @@ public class Game {
         return board;
     }
 
-    static boolean player1(String[][] board1, int guessX, int guessY, Scanner keyboard, boolean gameNotWon) {
+    static boolean playTurn(String[][] board, int guessX, int guessY, Scanner keyboard, boolean gameNotWon, boolean player1Guessing) {
         boolean turnOver = false;
         boolean alreadyGuessed;
         
+        
         while (!turnOver) {
             System.out.print('\u000c');
-            printBoard(board1, false);
+            printBoard(board, false);
             alreadyGuessed = true;
+            
+            if(player1Guessing){
+                System.out.println("Player1 is guessing");
+            }else{
+                System.out.println("Player2 is guessing");
+            }
             while(alreadyGuessed){
                 // Doesn't validate guess until  has checked if the gu 
                 guessX = getValidXCoordinate(keyboard, "Enter the x position (A-J): ", false, "N/A", 1);
                 guessY = getValidYCoordinate(keyboard, "Enter the y position (1-10): ", false, "N/A", 1);
                 
-                if (board1[guessX - 1][guessY - 1].equals("ship")) {
+                if (board[guessX - 1][guessY - 1].equals("ship")) {
                     System.out.println("hit");
-                    board1[guessX - 1][guessY - 1] = "o ";
+                    board[guessX - 1][guessY - 1] = "o ";
                     alreadyGuessed = false;
-                }else if(board1[guessX - 1][guessY - 1].equals("empty")){
+                }else if(board[guessX - 1][guessY - 1].equals("empty")){
                     System.out.println("miss");
-                    board1[guessX - 1][guessY - 1] = "x ";
+                    board[guessX - 1][guessY - 1] = "x ";
                     alreadyGuessed = false;
                     turnOver = true;
                 }else{
                     System.out.println("You have already guessed that square please guess another one");
                 }
             }
-            if (areAllShipsSunk(board1)) {
+            if (areAllShipsSunk(board)) {
                 System.out.println("All ships sunk!");
                 turnOver = true;
                 gameNotWon = false;
@@ -129,41 +142,6 @@ public class Game {
         return gameNotWon;
     }
     
-    static boolean player2(String[][] board2, int guessX, int guessY, Scanner keyboard, boolean gameNotWon) {
-        boolean turnOver = false;
-        boolean alreadyGuessed;
-        
-        while (!turnOver) {
-            System.out.print('\u000c');
-            printBoard(board2, false);
-            alreadyGuessed = true;
-            while(alreadyGuessed){
-                // Doesn't validate guess until  has checked if the gu 
-                guessX = getValidXCoordinate(keyboard, "Enter the x position (A-J): ", false, "N/A", 1);
-                guessY = getValidYCoordinate(keyboard, "Enter the y position (1-10): ", false, "N/A", 1);
-                
-                if (board2[guessX - 1][guessY - 1].equals("ship")) {
-                    System.out.println("hit");
-                    board2[guessX - 1][guessY - 1] = "o ";
-                    alreadyGuessed = false;
-                }else if(board2[guessX - 1][guessY - 1].equals("empty")){
-                    System.out.println("miss");
-                    board2[guessX - 1][guessY - 1] = "x ";
-                    alreadyGuessed = false;
-                    turnOver = true;
-                }else{
-                    System.out.println("You have already guessed that square please guess another one");
-                }
-            }
-            if (areAllShipsSunk(board2)) {
-                System.out.println("All ships sunk!");
-                turnOver = true;
-                gameNotWon = false;
-            }
-        }
-        return gameNotWon;
-    }
-
     static void printBoard(String[][] board, boolean placingShip) {
         // Print column labels (A-J)
         System.out.print("  ");
