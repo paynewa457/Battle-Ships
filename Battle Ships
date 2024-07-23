@@ -8,6 +8,11 @@
 import java.util.Scanner;
 
 public class Game {
+    /**
+     * This method runs the game, it lets yu plae the ships and then 
+     * puts the playTurn method intoa while loop until it detects
+     * that all the ships are sunk and then the game ends
+     */
     public static void main(String[] args) {
         Scanner keyboard = new Scanner(System.in);
         String[][] board1 = new String[10][10];
@@ -34,7 +39,11 @@ public class Game {
         }
         System.out.println("Game Over");
     }
-
+    /**
+     * This method places the ships on the board it does this by checking
+     * if the placement is in bounds through the getValidX/YCoordinate methods
+     * if it is it changes the coordinates location from empty to ship
+     */
     static String[][] initializeBoard(String[][] board, Scanner keyboard, boolean player1) {
         int numShips = 4;
         boolean okayWithPlacement = false;
@@ -99,7 +108,12 @@ public class Game {
         }
         return board;
     }
-
+    /**
+     * This method plays a turn both player 1's and player 2's turns are done
+     * using this method they just use different turns. In the main method 
+     * they are in a while loop until it notices all the ships are sunk and 
+     * the game ends
+     */
     static boolean playTurn(String[][] board, int guessX, int guessY, Scanner keyboard, boolean gameNotWon, boolean player1Guessing) {
         boolean turnOver = false;
         boolean alreadyGuessed;
@@ -111,9 +125,9 @@ public class Game {
             alreadyGuessed = true;
             
             if(player1Guessing){
-                System.out.println("Player1 is guessing");
+                System.out.println("Player 1 is guessing");
             }else{
-                System.out.println("Player2 is guessing");
+                System.out.println("Player 2 is guessing");
             }
             while(alreadyGuessed){
                 // Doesn't validate guess until  has checked if the gu 
@@ -141,7 +155,11 @@ public class Game {
         }
         return gameNotWon;
     }
-    
+    /**
+     * This method prints the board it makes it so that the spaces with the 
+     * values of ship or empty instead pint with a . so you don't know where 
+     * the shis are and also so t ooks nicer.
+     */
     static void printBoard(String[][] board, boolean placingShip) {
         // Print column labels (A-J)
         System.out.print("  ");
@@ -173,7 +191,13 @@ public class Game {
             System.out.println();
         }
     }
-
+    /**
+     * This method checks to see if the X coordinate you entered was valid 
+     * it does this by checking to see if you have entered a letter and 
+     * if that letter is below J. It also checks if you are placing the 
+     * ship and if you are it check the length and orientation of the ship
+     * and f it is out of bonds it dosn't let you place the ship there.
+     */
     static int getValidXCoordinate(Scanner keyboard, String message, boolean placingShip, String orientation, int shipLength) {
         int coordinate = -1;
         while (true) {
@@ -198,7 +222,10 @@ public class Game {
         }
         return coordinate;
     }
-
+    /**
+     * This works the same as the X coordinate but with the Y coordinate 
+     * and numbers
+     */
     static int getValidYCoordinate(Scanner keyboard, String message, boolean placingShip, String orientation, int shipLength) {
         int coordinate;
         while (true) {
@@ -229,7 +256,11 @@ public class Game {
         }
         return coordinate;
     }
-
+    /**
+     * This method returns an orientaton, there are nly to vald orientations
+     * h and v this method only lets you leave when you have enered one of  
+     * them it then returns the orientation
+     */
     static String getValidOrientation(Scanner keyboard) {
         String orientation;
         while (true) {
@@ -243,7 +274,10 @@ public class Game {
         }
         return orientation;
     }
-
+    /**
+     * This method checks to see if the conditions of both isWithinBounds 
+     * and isOverlapping are met
+     */
     static boolean isValidPlacement(int x, int y, int length, String orientation, String[][] board) {
         if (isWithinBounds(x, y, length, orientation)) {
             if (!isOverlapping(x, y, length, orientation, board)) {
@@ -255,7 +289,10 @@ public class Game {
             return false;
         }
     }
-
+    /**
+     * This method checks the rientation of your ship and then and then 
+     * seeing if is out of bounds
+     */
     static boolean isWithinBounds(int x, int y, int length, String orientation) {
         if (orientation.equals("h")) {
             return x + length - 1 <= 10;
@@ -263,7 +300,10 @@ public class Game {
             return y + length - 1 <= 10;
         }
     }
-
+    /**
+     * This method checks the orientation and then goes the length of the 
+     * ship in that direction to see if it overlaps with another ship
+     */
     static boolean isOverlapping(int x, int y, int length, String orientation, String[][] board) {
         for (int i = 0; i < length; i++) {
             int checkX, checkY;
@@ -280,7 +320,9 @@ public class Game {
         }
         return false;
     }
-
+    /**
+     * This method change the value of an empty space to ship
+     */
     static void placeShip(int x, int y, int length, String orientation, String[][] board) {
         for (int i = 0; i < length; i++) {
             if (orientation.equals("h")) {
@@ -290,7 +332,11 @@ public class Game {
             }
         }
     }
-
+    /**
+     * This method check to see if all the ships are sunk it does this by 
+     * by checking every location on the grid if any hav the value ship 
+     * it returns false, otherwise it returns true and the game ends
+     */
     static boolean areAllShipsSunk(String[][] board) {
         for (int x = 0; x < 10; x++) {
             for (int y = 0; y < 10; y++) {
