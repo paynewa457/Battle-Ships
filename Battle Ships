@@ -36,7 +36,7 @@ public class Game {
     }
 
     static String[][] initializeBoard(String[][] board, Scanner keyboard, boolean player1) {
-        int numShips = 1;
+        int numShips = 4;
         boolean okayWithPlacement = false;
         
         if(player1){
